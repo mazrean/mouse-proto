@@ -1,4 +1,4 @@
-package com.example.mouse_proto
+package com.mazrean.mouse_proto
 
 import io.flutter.embedding.android.FlutterActivity
 
