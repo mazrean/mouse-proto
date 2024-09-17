@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mouse_proto/view_model/mouse_state.dart';
+import 'package:mouse_proto/model/mouse_state.dart';
 
-class DemoPage extends ConsumerWidget {
+class DemoPage extends HookConsumerWidget {
   const DemoPage({super.key, required this.title});
 
   final String title;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(mouseStateViewModelProvider);
     final mouseViewModel = ref.watch(mouseStateViewModelProvider.notifier);
 
     return Scaffold(
@@ -17,15 +18,40 @@ class DemoPage extends ConsumerWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
       ),
-      body: Center(
+      body: GestureDetector(
+        onScaleUpdate: (details) {
+          if (details.pointerCount == 2) {
+            mouseViewModel.moveWheel(details.focalPointDelta.dy.toInt() ~/ 5);
+          } else {
+            mouseViewModel.movePointer(details.focalPointDelta.dx.toInt(), details.focalPointDelta.dy.toInt());
+          }
+        },
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'State: ${state.leftButton}',
-            ),
+          children: [
+            Expanded(child: Row(
+              children: [
+                Expanded(child: GestureDetector(
+                  onTapDown: (_) => mouseViewModel.setButtonState(MouseButton.left, true),
+                  onTapUp: (_) => mouseViewModel.setButtonState(MouseButton.left, false),
+                  child: Container(
+                    color: Colors.red,
+                  ),
+                )),
+                Expanded(child: GestureDetector(
+                  onTapDown: (_) => mouseViewModel.setButtonState(MouseButton.right, true),
+                  onTapUp: (_) => mouseViewModel.setButtonState(MouseButton.right, false),
+                  child: Container(
+                    color: Colors.green,
+                  ),
+                )),
+              ],
+            )),
+            Expanded(child: Container(
+              color: Colors.blue,
+            )),
           ],
         ),
+
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
@@ -34,5 +60,21 @@ class DemoPage extends ConsumerWidget {
         child: const Icon(Icons.add),
       ),
     );
+  }
+}
+
+class _DragState {
+  final DateTime? _startTime;
+  int x;
+  int y;
+  _DragState(this._startTime, this.x, this.y);
+
+  bool within100ms() {
+    return _startTime != null && DateTime.now().difference(_startTime).inMilliseconds < 100;
+  }
+
+  void add(int dx, int dy) {
+    x += dx;
+    y += dy;
   }
 }

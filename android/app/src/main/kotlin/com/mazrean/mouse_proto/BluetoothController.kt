@@ -172,9 +172,9 @@ class BluetoothController(private val activity: Activity, private val eventChann
         wheel: Int) {
         val report = ByteArray(4)
 
-        if (right) report[0] = report[0] or 0x01
+        if (left) report[0] = report[0] or 0x01
+        if (right) report[0] = report[0] or 0x02
         if (middle) report[0] = report[0] or 0x04
-        if (left) report[0] = report[0] or 0x02
 
         report[1] = limit(x, -127, 127).toByte()
         report[2] = limit(y, -127, 127).toByte()
