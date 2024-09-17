@@ -19,9 +19,6 @@ mixin _$MouseState {
   bool get leftButton => throw _privateConstructorUsedError;
   bool get rightButton => throw _privateConstructorUsedError;
   bool get middleButton => throw _privateConstructorUsedError;
-  int get x => throw _privateConstructorUsedError;
-  int get y => throw _privateConstructorUsedError;
-  int get wheel => throw _privateConstructorUsedError;
 
   /// Create a copy of MouseState
   /// with the given fields replaced by the non-null parameter values.
@@ -36,13 +33,7 @@ abstract class $MouseStateCopyWith<$Res> {
           MouseState value, $Res Function(MouseState) then) =
       _$MouseStateCopyWithImpl<$Res, MouseState>;
   @useResult
-  $Res call(
-      {bool leftButton,
-      bool rightButton,
-      bool middleButton,
-      int x,
-      int y,
-      int wheel});
+  $Res call({bool leftButton, bool rightButton, bool middleButton});
 }
 
 /// @nodoc
@@ -63,9 +54,6 @@ class _$MouseStateCopyWithImpl<$Res, $Val extends MouseState>
     Object? leftButton = null,
     Object? rightButton = null,
     Object? middleButton = null,
-    Object? x = null,
-    Object? y = null,
-    Object? wheel = null,
   }) {
     return _then(_value.copyWith(
       leftButton: null == leftButton
@@ -80,18 +68,6 @@ class _$MouseStateCopyWithImpl<$Res, $Val extends MouseState>
           ? _value.middleButton
           : middleButton // ignore: cast_nullable_to_non_nullable
               as bool,
-      x: null == x
-          ? _value.x
-          : x // ignore: cast_nullable_to_non_nullable
-              as int,
-      y: null == y
-          ? _value.y
-          : y // ignore: cast_nullable_to_non_nullable
-              as int,
-      wheel: null == wheel
-          ? _value.wheel
-          : wheel // ignore: cast_nullable_to_non_nullable
-              as int,
     ) as $Val);
   }
 }
@@ -104,13 +80,7 @@ abstract class _$$MouseStateImplCopyWith<$Res>
       __$$MouseStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool leftButton,
-      bool rightButton,
-      bool middleButton,
-      int x,
-      int y,
-      int wheel});
+  $Res call({bool leftButton, bool rightButton, bool middleButton});
 }
 
 /// @nodoc
@@ -129,9 +99,6 @@ class __$$MouseStateImplCopyWithImpl<$Res>
     Object? leftButton = null,
     Object? rightButton = null,
     Object? middleButton = null,
-    Object? x = null,
-    Object? y = null,
-    Object? wheel = null,
   }) {
     return _then(_$MouseStateImpl(
       leftButton: null == leftButton
@@ -146,18 +113,6 @@ class __$$MouseStateImplCopyWithImpl<$Res>
           ? _value.middleButton
           : middleButton // ignore: cast_nullable_to_non_nullable
               as bool,
-      x: null == x
-          ? _value.x
-          : x // ignore: cast_nullable_to_non_nullable
-              as int,
-      y: null == y
-          ? _value.y
-          : y // ignore: cast_nullable_to_non_nullable
-              as int,
-      wheel: null == wheel
-          ? _value.wheel
-          : wheel // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
@@ -168,10 +123,7 @@ class _$MouseStateImpl extends _MouseState {
   const _$MouseStateImpl(
       {required this.leftButton,
       required this.rightButton,
-      required this.middleButton,
-      required this.x,
-      required this.y,
-      required this.wheel})
+      required this.middleButton})
       : super._();
 
   @override
@@ -180,16 +132,10 @@ class _$MouseStateImpl extends _MouseState {
   final bool rightButton;
   @override
   final bool middleButton;
-  @override
-  final int x;
-  @override
-  final int y;
-  @override
-  final int wheel;
 
   @override
   String toString() {
-    return 'MouseState(leftButton: $leftButton, rightButton: $rightButton, middleButton: $middleButton, x: $x, y: $y, wheel: $wheel)';
+    return 'MouseState(leftButton: $leftButton, rightButton: $rightButton, middleButton: $middleButton)';
   }
 
   @override
@@ -202,15 +148,12 @@ class _$MouseStateImpl extends _MouseState {
             (identical(other.rightButton, rightButton) ||
                 other.rightButton == rightButton) &&
             (identical(other.middleButton, middleButton) ||
-                other.middleButton == middleButton) &&
-            (identical(other.x, x) || other.x == x) &&
-            (identical(other.y, y) || other.y == y) &&
-            (identical(other.wheel, wheel) || other.wheel == wheel));
+                other.middleButton == middleButton));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, leftButton, rightButton, middleButton, x, y, wheel);
+  int get hashCode =>
+      Object.hash(runtimeType, leftButton, rightButton, middleButton);
 
   /// Create a copy of MouseState
   /// with the given fields replaced by the non-null parameter values.
@@ -225,10 +168,7 @@ abstract class _MouseState extends MouseState {
   const factory _MouseState(
       {required final bool leftButton,
       required final bool rightButton,
-      required final bool middleButton,
-      required final int x,
-      required final int y,
-      required final int wheel}) = _$MouseStateImpl;
+      required final bool middleButton}) = _$MouseStateImpl;
   const _MouseState._() : super._();
 
   @override
@@ -237,12 +177,6 @@ abstract class _MouseState extends MouseState {
   bool get rightButton;
   @override
   bool get middleButton;
-  @override
-  int get x;
-  @override
-  int get y;
-  @override
-  int get wheel;
 
   /// Create a copy of MouseState
   /// with the given fields replaced by the non-null parameter values.

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mouse_proto/view_model/mouse_state.dart';
-import 'package:mouse_proto/model/mouse_state.dart';
 
 class DemoPage extends ConsumerWidget {
   const DemoPage({super.key, required this.title});
@@ -30,7 +29,7 @@ class DemoPage extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
-            mouseViewModel.setPointerPosition(127, 127),
+            mouseViewModel.movePointer(127, 127),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),

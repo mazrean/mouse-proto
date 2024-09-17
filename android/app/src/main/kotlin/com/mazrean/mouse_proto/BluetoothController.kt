@@ -13,6 +13,7 @@ import android.bluetooth.BluetoothProfile
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 import kotlin.experimental.or
+import kotlin.math.max
+import kotlin.math.min
 
 class BluetoothPermissionRequired: Error("bluetooth permission is required")
 
@@ -86,6 +89,10 @@ class BluetoothController(private val activity: Activity, private val eventChann
             arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT)
         } else {
             arrayOf(Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN)
+        }
+
+        private fun limit(value: Int, min: Int, max: Int): Int {
+            return max(min(value, max), min)
         }
     }
 
@@ -169,10 +176,10 @@ class BluetoothController(private val activity: Activity, private val eventChann
         if (middle) report[0] = report[0] or 0x04
         if (left) report[0] = report[0] or 0x02
 
-        report[1] = x.toByte()
-        report[2] = y.toByte()
+        report[1] = limit(x, -127, 127).toByte()
+        report[2] = limit(y, -127, 127).toByte()
 
-        report[3] = wheel.toByte()
+        report[3] = limit(wheel, -127, 127).toByte()
 
         sendReport(report)
     }

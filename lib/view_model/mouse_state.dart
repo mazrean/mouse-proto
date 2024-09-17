@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mouse_proto/model/mouse_state.dart';
-
 import 'package:mouse_proto/repository/bluetooth_hid.dart';
+import 'package:mouse_proto/model/mouse_move.dart';
 
 final mouseStateViewModelProvider = StateNotifierProvider.autoDispose<MouseStateViewModel, MouseState>(
   (ref) => MouseStateViewModel(
@@ -9,9 +9,6 @@ final mouseStateViewModelProvider = StateNotifierProvider.autoDispose<MouseState
       leftButton: false,
       rightButton: false,
       middleButton: false,
-      x: 0,
-      y: 0,
-      wheel: 0,
     ),
   ),
 );
@@ -24,21 +21,19 @@ class MouseStateViewModel extends StateNotifier<MouseState> {
   void setButtonState(MouseButton button, bool isDown) {
     state = state.setButtonState(button, isDown);
     _bluetoothHID.then((hid) {
-      hid.sendMouseState(state);
+      hid.sendMouseMessage(state, const MouseMove(x: 0, y: 0, wheel: 0));
     });
   }
 
-  void setPointerPosition(int x, int y) {
-    state = state.setPointerPosition(x, y);
+  void movePointer(int x, int y) {
     _bluetoothHID.then((hid) {
-      hid.sendMouseState(state);
+      hid.sendMouseMessage(state, MouseMove(x: x, y: y, wheel: 0));
     });
   }
 
-  void setWheel(int wheel) {
-    state = state.setWheel(wheel);
+  void moveWheel(int wheel) {
     _bluetoothHID.then((hid) {
-      hid.sendMouseState(state);
+      hid.sendMouseMessage(state, MouseMove(x: 0, y: 0, wheel: wheel));
     });
   }
 }

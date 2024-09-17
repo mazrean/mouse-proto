@@ -15,8 +15,6 @@ class MouseState with _$MouseState {
     required bool leftButton,
     required bool rightButton,
     required bool middleButton,
-    required int x, required int y,
-    required int wheel
   }) = _MouseState;
 
   MouseState setButtonState(MouseButton button, bool isDown) {
@@ -26,8 +24,4 @@ class MouseState with _$MouseState {
       MouseButton.middle => copyWith(middleButton: isDown),
     };
   }
-
-  MouseState setPointerPosition(int x, int y) => copyWith(x: x, y: y);
-
-  MouseState setWheel(int wheel) => copyWith(wheel: wheel);
 }
