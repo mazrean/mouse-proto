@@ -40,6 +40,7 @@ dependencies:
   riverpod_annotation: ^2.3.5
   hooks_riverpod: ^2.5.2
   flutter_hooks: ^0.20.5
+  pigeon: ^22.4.0
 
 dev_dependencies:
   flutter_test:
