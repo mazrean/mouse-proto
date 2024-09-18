@@ -21,6 +21,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
@@ -42,7 +43,7 @@ class MainActivity: FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
 
         eventChannelManager = EventChannelManager(this, flutterEngine)
-        bluetoothController = BluetoothController(this, eventChannelManager)
+        bluetoothController = BluetoothController(this)
         if (!bluetoothController.requestPermissions()) {
             exitProcess(1)
         }
@@ -56,9 +57,12 @@ class MainActivity: FlutterActivity() {
                     val x = call.argument<Int>("x") ?: 0
                     val y = call.argument<Int>("y") ?: 0
                     val wheel = call.argument<Int>("wheel") ?: 0
-                    eventChannelManager.log("sendMouse: right=$right, left=$left, middle=$middle, x=$x, y=$y, wheel=$wheel")
+                    Log.d("MainActivity", "sendMouse: right=$right, left=$left, middle=$middle, x=$x, y=$y, wheel=$wheel")
 
-                    bluetoothController.sendMouseReport(right, middle, left, x, y, wheel)
+                    bluetoothController.sendMouseReport(right, middle, left, x, y, wheel).onFailure {
+                        result.error("sendMouse", it.message, null)
+                        return@setMethodCallHandler
+                    }
 
                     result.success(null)
                 }

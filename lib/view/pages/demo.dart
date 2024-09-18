@@ -62,19 +62,3 @@ class DemoPage extends HookConsumerWidget {
     );
   }
 }
-
-class _DragState {
-  final DateTime? _startTime;
-  int x;
-  int y;
-  _DragState(this._startTime, this.x, this.y);
-
-  bool within100ms() {
-    return _startTime != null && DateTime.now().difference(_startTime).inMilliseconds < 100;
-  }
-
-  void add(int dx, int dy) {
-    x += dx;
-    y += dy;
-  }
-}

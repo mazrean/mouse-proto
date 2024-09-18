@@ -13,6 +13,7 @@ import android.bluetooth.BluetoothProfile
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,9 +26,10 @@ import kotlin.math.max
 import kotlin.math.min
 
 class BluetoothPermissionRequired: Error("bluetooth permission is required")
+class BluetoothHIDNotSupported: Error("Bluetooth HID is not supported")
 
 @SuppressLint("MissingPermission")
-class BluetoothController(private val activity: Activity, private val eventChannelManager: EventChannelManager) {
+class BluetoothController(private val activity: Activity) {
     companion object {
         private const val PERMISSION_REQUEST_CODE = 101
         private const val MOUSE_REPORT_ID = 0x1
@@ -127,7 +129,9 @@ class BluetoothController(private val activity: Activity, private val eventChann
 
     private val serviceListener = object : BluetoothProfile.ServiceListener {
         override fun onServiceConnected(profile: Int, proxy: BluetoothProfile) {
-            eventChannelManager.log("onServiceConnected")
+            if (profile != BluetoothProfile.HID_DEVICE) return
+
+            Log.d("BluetoothController", "onServiceConnected")
 
             hidDevice = proxy as? BluetoothHidDevice
 
@@ -141,7 +145,9 @@ class BluetoothController(private val activity: Activity, private val eventChann
         }
 
         override fun onServiceDisconnected(profile: Int) {
-            eventChannelManager.log("onServiceDisconnected")
+            if (profile != BluetoothProfile.HID_DEVICE) return
+
+            Log.d("BluetoothController", "onServiceDisconnected")
 
             hidDevice = null
         }
@@ -169,7 +175,7 @@ class BluetoothController(private val activity: Activity, private val eventChann
     fun sendMouseReport(
         right: Boolean, middle: Boolean, left: Boolean,
         x: Int, y: Int,
-        wheel: Int) {
+        wheel: Int): Result<Unit> {
         val report = ByteArray(4)
 
         if (left) report[0] = report[0] or 0x01
@@ -181,18 +187,17 @@ class BluetoothController(private val activity: Activity, private val eventChann
 
         report[3] = limit(wheel, -127, 127).toByte()
 
-        sendReport(report)
+        return sendReport(report)
     }
 
-    private fun sendReport(report: ByteArray) {
-        if (hidDevice == null) {
-            eventChannelManager.log("BluetoothHidDevice is null")
-            return
-        }
+    private fun sendReport(report: ByteArray): Result<Unit> {
+        if (hidDevice == null) return Result.failure(BluetoothHIDNotSupported())
 
         hidDevice?.getDevicesMatchingConnectionStates(intArrayOf(BluetoothProfile.STATE_CONNECTED))?.forEach {
-            eventChannelManager.log("Sending report to $it")
+            Log.d("BluetoothController", "sendReport: $it, $report")
             hidDevice?.sendReport(it, MOUSE_REPORT_ID, report)
         }
+
+        return Result.success(Unit)
     }
 }
