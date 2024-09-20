@@ -38,7 +38,6 @@ class BluetoothController(private val activity: Activity) {
             0x05, 0x01,  // Usage Page (Generic Desktop)
             0x09, 0x02,  // Usage (Mouse)
             0xA1.toByte(), 0x01,  // Collection (Application)
-            0x85.toByte(), MOUSE_REPORT_ID.toByte(),  //   Report ID (1)
             0x09, 0x01,  //   Usage (Pointer)
             0xA1.toByte(), 0x00,  //   Collection (Physical)
             0x05, 0x09,  //     Usage Page (Button)

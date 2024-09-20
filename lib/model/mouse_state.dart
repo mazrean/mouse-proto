@@ -24,4 +24,12 @@ class MouseState with _$MouseState {
       MouseButton.middle => copyWith(middleButton: isDown),
     };
   }
+
+  MouseState clearButtonState() {
+    return const MouseState(
+      leftButton: false,
+      rightButton: false,
+      middleButton: false,
+    );
+  }
 }
